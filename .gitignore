@@ -1,0 +1,5 @@
+node_modules
+public/posts
+public/profiles
+.env
+.env.production
