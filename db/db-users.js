@@ -17,7 +17,7 @@ class dbUsers {
   };
 
   addUser(data) {
-    data.profilepic = data.profilepic.replaceAll(":", "-");
+    //data.profilepic = data.profilepic.replaceAll(":", "-");
     const sql = `insert into users(username, datejoined, img, phoneno, email, fullname, password) values(
       $1,CURRENT_TIMESTAMP,$2,$3,$4,$5,$6
     )`;
@@ -48,6 +48,12 @@ class dbUsers {
       `update users set img=$1,phoneno=$2, fullname=$3 where username = $4 returning *`,
       [userdata.filename, data.phoneno, data.fullname, data.username]
     );
+  }
+
+  searchUser(user) {
+    return this.dao.run(`select * from users where username ILIKE $1`, [
+      `${user}%`,
+    ]);
   }
 }
 

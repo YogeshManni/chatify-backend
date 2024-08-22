@@ -97,16 +97,28 @@ router.post("/login", async (req, res, next) => {
 router.post("/updateUserdata", async (req, res, next) => {
   try {
     const response = await getDbo().updateUser(req.body);
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "User data updated successfully!",
-        data: response[0],
-      });
+    res.status(200).json({
+      status: "success",
+      message: "User data updated successfully!",
+      data: response[0],
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ status: "failed", message: "Error occured" });
+  }
+});
+
+router.post("/searchUsers", async (req, res, next) => {
+  try {
+    const response = await getDbo().searchUser(req.body.query);
+    res.status(200).json({
+      status: "success",
+      message: "User retrieved!",
+      data: response,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: "failed", message: `Error occured ${err}` });
   }
 });
 
