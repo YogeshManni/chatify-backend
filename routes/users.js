@@ -122,4 +122,17 @@ router.post("/searchUsers", async (req, res, next) => {
   }
 });
 
+router.post("/addChatId", async (req, res, next) => {
+  try {
+    const response = await getDbo().addChatId(req.body);
+    res.status(200).json({
+      status: "success",
+      message: "chat id added!",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: "failed", message: `Error occured ${err}` });
+  }
+});
+
 module.exports = router;

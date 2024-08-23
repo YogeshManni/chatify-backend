@@ -6,13 +6,10 @@ class dbUsers {
 
   createTable = async () => {
     let sql = `
-        BEGIN;
-        
-        create table if not exists users(id serial primary key, username text, datejoined timestamp, img text, phoneno text, email text, fullname text, password text);
-        
-        create table if not exists comments(id serial primary key, discussionid int, username text, comment text, date timestamp, type text);
-
-        COMMIT;`;
+        BEGIN;        
+          create table if not exists users(id serial primary key, username text, datejoined timestamp, img text, phoneno text, email text, fullname text, password text);
+          create table if not exists chatusers(id serial  primary key, userid integer, chat_ids INTEGER[]);
+          COMMIT;`;
     this.dao.run(sql);
   };
 
@@ -54,6 +51,16 @@ class dbUsers {
     return this.dao.run(`select * from users where username ILIKE $1`, [
       `${user}%`,
     ]);
+  }
+
+  addChatId(data) {
+    return this.dao.run(
+      `INSERT INTO chatusers (userid, chat_ids)
+  VALUES ($1, ARRAY[$2]::INTEGER)
+  ON CONFLICT (userid)
+  DO UPDATE SET chat_ids = array_append(chatusers.chat_ids, $2::INTEGER)`,
+      [data.userId, data.chatId]
+    );
   }
 }
 
