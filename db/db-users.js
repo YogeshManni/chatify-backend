@@ -56,10 +56,17 @@ class dbUsers {
   addChatId(data) {
     return this.dao.run(
       `INSERT INTO chatusers (userid, chat_ids)
-  VALUES ($1, ARRAY[$2]::INTEGER)
+  VALUES ($1, ARRAY[$2]::integer[])
   ON CONFLICT (userid)
   DO UPDATE SET chat_ids = array_append(chatusers.chat_ids, $2::INTEGER)`,
       [data.userId, data.chatId]
+    );
+  }
+
+  getChatUsers(data) {
+    return this.dao.run(
+      `select * from users where id = ANY (select unnest(chat_ids) from chatusers where userid=$1)`,
+      [data.id]
     );
   }
 }
