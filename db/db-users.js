@@ -1,17 +1,7 @@
 class dbUsers {
   constructor(dao) {
     this.dao = dao;
-    this.createTable();
   }
-
-  createTable = async () => {
-    let sql = `
-        BEGIN;        
-          create table if not exists users(id serial primary key, username text, datejoined timestamp, img text, phoneno text, email text, fullname text, password text);
-          create table if not exists chatusers(id serial  primary key, userid integer, chat_ids INTEGER[]);
-          COMMIT;`;
-    this.dao.run(sql);
-  };
 
   addUser(data) {
     //data.profilepic = data.profilepic.replaceAll(":", "-");

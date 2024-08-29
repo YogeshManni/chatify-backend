@@ -70,19 +70,20 @@ io.on("connection", (socket) => {
 
     //struct message acc to frontend
     const newMsg = {
-      msg: message,
+      msg: message.msg,
       timeStamp: new Date().toISOString(),
-      isMine: false,
+      user: message.user,
     };
     //send message
     io.to(users[to]).emit("chat message", { to, from, newMsg });
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("Disconnecting user ..... ");
 
     for (let userId in users) {
       if (users[userId] === socket.id) {
+        console.log(`User ${users[userId]} disconnected`);
         delete users[userId];
         break;
       }
