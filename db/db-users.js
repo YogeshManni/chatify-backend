@@ -59,6 +59,34 @@ class dbUsers {
       [data.id]
     );
   }
-}
 
+  saveMessage(data) {
+    // Check if a relevant message exists
+    if (!data.firstTime) {
+      // Append to existing JSONB content
+      return this.dao.run(
+        `UPDATE messages
+     SET content = content || $3::jsonb
+     WHERE (sender_id = $1 AND receiver_id = $2)
+   OR (sender_id = $2 AND receiver_id = $1)`,
+        [data.sender, data.receiver, data.msg]
+      );
+    } else {
+      // Insert a new message
+      return this.dao.run(
+        `INSERT INTO messages (sender_id, receiver_id, content)
+     VALUES ($1, $2, $3::jsonb)`,
+        [data.sender, data.receiver, data.msg]
+      );
+    }
+  }
+
+  getMessages(data) {
+    return this.dao.run(
+      `select content from messages where (sender_id = $1 AND receiver_id = $2)
+   OR (sender_id = $2 AND receiver_id = $1)`,
+      [data.sender, data.receiver]
+    );
+  }
+}
 module.exports = dbUsers;
