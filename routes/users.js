@@ -171,7 +171,7 @@ router.post("/getMessages", async (req, res, next) => {
     res.status(200).json({
       status: "success",
       message: "Messages fetched!",
-      data:response
+      data: response[0]?.content || [],
     });
   } catch (err) {
     console.log(err);
