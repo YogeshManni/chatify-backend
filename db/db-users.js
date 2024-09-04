@@ -55,7 +55,21 @@ class dbUsers {
 
   getChatUsers(data) {
     return this.dao.run(
-      `select * from users where id = ANY (select unnest(chat_ids) from chatusers where userid=$1)`,
+      `
+ WITH user_chats AS (
+    SELECT unnest(chat_ids) AS chat_id
+    FROM chatusers
+    WHERE userid = $1
+),
+user_data AS (
+    SELECT u.*
+    FROM users u
+    WHERE u.id = ANY (SELECT chat_id FROM user_chats)
+)
+
+select content[array_length(content,1)],user_data.* from  user_data inner join  messages on (messages.sender_id  = user_data.id  or   messages.receiver_id  = user_data.id)  where (sender_id = $1 or receiver_id = $1)
+
+`,
       [data.id]
     );
   }
