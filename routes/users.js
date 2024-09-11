@@ -179,4 +179,18 @@ router.post("/getMessages", async (req, res, next) => {
   }
 });
 
+router.post("/updateMessage", async (req, res, next) => {
+  try {
+    const response = await getDbo().updateMessage(req.body);
+
+    res.status(200).json({
+      status: "success",
+      message: "Message updated!",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: "failed", message: `Error occured ${err}` });
+  }
+});
+
 module.exports = router;

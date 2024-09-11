@@ -102,5 +102,16 @@ class dbUsers {
       [data.sender, data.receiver]
     );
   }
+
+  updateMessage(data) {
+    // update precious message
+    return this.dao.run(
+      `
+UPDATE messages
+SET content[array_length(content,1)] = jsonb_set(content[array_length(content,1)],'{isRead}','true')
+WHERE sender_id = $1 AND receiver_id = $2`,
+      [data.sender, data.receiver]
+    );
+  }
 }
 module.exports = dbUsers;

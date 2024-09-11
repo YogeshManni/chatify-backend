@@ -15,6 +15,7 @@
     "express": "~4.16.1",
     "fs": "^0.0.1-security",
     "http-errors": "~1.6.3",
+    "jose-backend": "file:",
     "moment": "^2.29.4",
     "momentjs": "^2.0.0",
     "morgan": "~1.9.1",
