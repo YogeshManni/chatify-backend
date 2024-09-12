@@ -59,7 +59,11 @@ io.on("connection", (socket) => {
     //  Add user to the users object if  not already present
     if (!users[userId]) {
       users[userId] = socket.id; // Associate user ID with socket ID
-      console.log(`User ${userId} registered with socket ID ${socket.id}`);
+      console.log(`
+        ----------------------------------------------------
+        User ${userId} registered with socket ID ${socket.id}
+        ----------------------------------------------------
+        `);
     }
   });
 
@@ -79,7 +83,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("Disconnecting user ..... ");
+    console.log(`
+      ---------------------------
+      Disconnecting user ..... 
+      ----------------------------
+      `);
 
     for (let userId in users) {
       if (users[userId] === socket.id) {
