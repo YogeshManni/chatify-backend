@@ -43,12 +43,26 @@ class dbUsers {
     ]);
   }
 
-  addChatId(data) {
-    return this.dao.run(
-      `INSERT INTO chatusers (userid, chat_ids)
+  async addChatId(data) {
+    await this.dao.run(
+      `
+      INSERT INTO chatusers (userid, chat_ids)
   VALUES ($1, ARRAY[$2]::integer[])
   ON CONFLICT (userid)
-  DO UPDATE SET chat_ids = array_append(chatusers.chat_ids, $2::INTEGER)`,
+  DO UPDATE SET chat_ids = array_append(chatusers.chat_ids, $2::INTEGER)
+
+  `,
+      [data.userId, data.chatId]
+    );
+
+    await this.dao.run(
+      `
+      INSERT INTO chatusers (userid, chat_ids)
+    VALUES ($2, ARRAY[$1]::integer[])
+    ON CONFLICT (userid)
+    DO UPDATE SET chat_ids = array_append(chatusers.chat_ids, $1::INTEGER);
+   
+  `,
       [data.userId, data.chatId]
     );
   }
