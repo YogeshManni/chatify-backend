@@ -5,8 +5,8 @@ class dbUsers {
 
   addUser(data) {
     //data.profilepic = data.profilepic.replaceAll(":", "-");
-    const sql = `insert into users(username, datejoined, img, phoneno, email, fullname, password) values(
-      $1,CURRENT_TIMESTAMP,$2,$3,$4,$5,$6
+    const sql = `insert into users(username, datejoined, img, phoneno, email, fullname, password, lastseen) values(
+      $1,CURRENT_TIMESTAMP,$2,$3,$4,$5,$6,CURRENT_TIMESTAMP
     )`;
     return this.dao.run(sql, [
       data.username,
@@ -126,6 +126,17 @@ SET content[array_length(content,1)] = jsonb_set(content[array_length(content,1)
 WHERE (sender_id = $1 AND receiver_id = $2)
    OR (sender_id = $2 AND receiver_id = $1)`,
       [data.sender, data.receiver]
+    );
+  }
+
+  updatelastSeen(data) {
+    // update lastSeen datetime
+
+    return this.dao.run(
+      `
+        update users set lastseen = CURRENT_TIMESTAMP where  id = $1
+      `,
+      [data.userId]
     );
   }
 }

@@ -31,7 +31,7 @@ module.exports = class appDb {
   createTable = async () => {
     let sql = `
           BEGIN;  
-            create table if not exists users(id serial primary key, username text, datejoined timestamp, img text, phoneno text, email text, fullname text, password text);
+            create table if not exists users(id serial primary key, username text, datejoined timestamp, img text, phoneno text, email text, fullname text, password text,lastseen timestamp);
             create table if not exists chatusers(id serial  primary key, userid integer UNIQUE, chat_ids INTEGER[]);
             CREATE TABLE if not exists messages(message_id SERIAL PRIMARY KEY,sender_id INT NOT NULL,receiver_id INT NOT NULL,content JSONB[]);
           COMMIT;`;
